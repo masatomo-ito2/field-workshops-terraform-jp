@@ -38,8 +38,8 @@ layout: true
 ---
 name: Introductions
 # Introductions
-* Your Name
-* Job Title
+* Your Name: 伊藤仁智
+* Job Title:  Sr. solutions engineer
 * Automation Experience
 * Favorite Text Editor
 
