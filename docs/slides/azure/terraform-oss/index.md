@@ -671,7 +671,7 @@ class: title
 ---
 name: anatomy-of-a-resource
 # Anatomy of a Resource
-Every terraform resource is structured exactly the same way.
+Terraformのresourceは全て同じような構成になっています。
 ```terraform
 resource "type" "name" {
   parameter = "foo"
@@ -679,9 +679,9 @@ resource "type" "name" {
   list = ["one", "two", "three"]
 }
 ```
-**resource** = Top level keyword<br>
-**type** = Type of resource. Example: `azurerm_virtual_machine`.<br>
-**name** = Arbitrary name to refer to this resource. Used internally by terraform. This field *cannot* be a variable.
+**resource** = トップレベルのキーワード<br>
+**type** = Resourceのタイプ。例: `azurerm_virtual_machine`.<br>
+**name** = このResourceに対する任意の名前。Terraformの内部でのみ使われる。変数で指定はできない。
 
 ???
 Everything else you want to configure within the resource is going to be sandwiched between the curly braces. These can include strings, lists, and maps.
@@ -689,9 +689,10 @@ Everything else you want to configure within the resource is going to be sandwic
 ---
 name: provider-block
 # Terraform Provider Configuration
-The terraform core program requires at least one provider to build anything.
 
-You can manually configure which version(s) of a provider you would like to use. If you leave this option out, Terraform will default to the latest available version of the provider.
+Terraformは少なくとも一つのProviderを必要とします。
+
+使用したいProviderのVersionを指定することもできます。指定しない場合、Terraformは最新のVersionのProviderを使用します。
 
 ```hcl
 provider "azurerm" {
@@ -709,11 +710,11 @@ resource "azurerm_resource_group" "hashitraining" {
 }
 ```
 
-Here is the first resource we'll be building in the next lab. The variables will be replaced with your own settings or default values.
+このようにResourceを記述していきます。**`var`**には、指定された変数やデフォルト値が使われます。
 
-Terraform is easy to work with. You can test your code as you write it.
+Terraformは柔軟にできているので、実際にApplyしたりPlanしながら書いていく事ができます。
 
-Simply keep adding more building blocks until your infrastructure is complete.
+必要なResourceを順次記述していき、インフラの望むべき状態を完成させます。
 
 ???
 **Try commenting out this code, then uncommenting it. This is the easy way to write code. Just highlight, uncomment, save the file.**
@@ -741,7 +742,7 @@ Terraform will perform the following actions:
 
 Plan: 1 to add, 0 to change, 0 to destroy.
 ```
-`terraform apply` runs a plan and then if you approve, it applies the changes.
+`terraform apply`はplanの結果を承認することで実際のProvisioningを行います。
 
 ---
 name: terraform-destroy
@@ -763,26 +764,28 @@ Terraform will perform the following actions:
 
 Plan: 0 to add, 0 to change, 1 to destroy.
 ```
-`terraform destroy` does the opposite. If you approve, your infrastructure is destroyed.
+`terraform destroy`はapplyと反対のことをします。つまり、Applyで構築されたリソースを削除します。
+
 ???
 **Terraform can just as easily destroy infrastructure as create it. With great power comes great responsibility!**
 
 ---
 name: terraform-fmt
 # Terraform Format
-Terraform comes with a built in code formatter/cleaner. It can make all your margins and list indentation neat and tidy. Beauty works better.
+
+TerraformにはビルトインのCode formatterがあります。Terraformコードのマージンやインデントなどを自動的に統一してくれます。
 
 ```tex
 terraform fmt
 ```
 
-Simply run it in a directory containing *.tf files and it will tidy up your code for you.
+このコマンドをTerraformコードの置いてあるDirectoryで実行するだけです。
 
 ---
 name: dependency-mapping
 class: compact
 # Terraform Dependency Mapping
-Terraform can automatically keep track of dependencies for you. Look at the two resources below. Note the highlighted line in the azurerm_virtual_network resource. This is how we tell one resource to refer to another in terraform.
+Terraformは自動的にResourceの依存関係を計算してくれます。以下のコードでは、二つのResourceが定義されています。片方はもう片方のResouceのAttributeを参照しています。このことより、Terraformは依存関係を構築していきます。
 
 ```terraform
 resource "azurerm_resource_group" "hashitraining" {
@@ -801,7 +804,9 @@ resource "azurerm_virtual_network" "vnet" {
 ---
 name: organizing-your-terraform
 # Organize Your Terraform Code
-Terraform will read any file in your workspace that ends in a `.tf` extension, but the convention is to have a main.tf, variables.tf, and outputs.tf. You may add more tf files if you wish.
+
+Terraformは全ての`.tf`ファイルを読み込みます。ただ、以下のような名前を推奨しています。
+
 
 ```bash
 main.tf
@@ -809,14 +814,14 @@ variables.tf
 outputs.tf
 ```
 
-Let's take a closer look at each of these files.
+main.tfが大きくなったら、別の名前へ分割もできます。例：network.tf, database.tfなど
 
 ---
 name: terraform-main
 class: compact
 # The Main File
 
-The first file is called main.tf. This is where you normally store your terraform code. With larger, more complex infrastructure you might break this up across several files.
+main.tfにはResourceを記述していきます。
 
 ```bash
 # This is the main.tf file.
@@ -842,7 +847,7 @@ name: terraform-variables
 class: compact
 # The Variables File
 
-The second file is called variables.tf. This is where you define your variables and optionally set some defaults.
+variables.tfには変数の宣言や定義を記述していきます。
 
 ```bash
 variable "prefix" {
@@ -864,7 +869,8 @@ variable "address_space" {
 name: terraform-outputs
 class: compact
 # The Outputs File
-The outputs file is where you configure any messages or data you want to show at the end of a terraform apply.
+
+outputs.tfにはTerraform実行後に表示するメッセージやデータを記述します。
 
 ```terraform
 output "Vault_Server_URL" {
@@ -889,9 +895,9 @@ class: img-right
 # Terraform Dependency Graph
 .center[![:scale 80%](images/blast_radius_graph_3.png)]
 
-The terraform resource graph visually depicts dependencies between resources.
+Terraformは内部でResource graphというものでResouce間の依存関係を管理します。
 
-The location and prefix variables are required to create the resource group, which is in turn required to build the virtual network.
+この例では、`prefix`と`location`という変数が`azurerm_virtual_network`の構築に必要ということを表しています。
 
 ???
 This is a good spot to talk a bit about how the dependency graph gets formed.
