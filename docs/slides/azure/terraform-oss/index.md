@@ -95,7 +95,7 @@ We use the word chapter here, because the training should feel like a story unfo
 name: How-to-Provision-a-VM
 # How to Provision an Azure VM
 
-Let's look at a few different ways you could provision a new Azure Virtual Machine. Before we start we'll need to gather some basic information including:
+Azure上のリソースをProvisioningするには、いくつかのベーシックな情報が必要となります。
 
 * Virtual Machine Name
 * Operating System (Image)
@@ -146,7 +146,7 @@ class: compact
   },
 ```
 
-ARM templates provide a consistent and reliable way to provision Azure resources. JSON is easy for computers to read, but can be challenging for humans to edit and troubleshoot.
+ARM templateはコンシスタントかつ信頼のおける方法です。ただ、JSON形式でリソースを書くのは人間にとっては容易ではありません。
 
 ???
 **Which brings us to method #2, Azure Resource Manager templates, also known as ARM templates. Have any of you used ARM templates? What's that experience like?**
@@ -179,24 +179,26 @@ resource "azure_virtual_machine" "web" {
 ???
 **And finally we have option #3, Terraform. Terraform uses a Domain Specific Language, or DSL that is designed to be both human-friendly and machine-readable. This is an example snippet of Terraform code. Now watch as I flip back to the previous slide. Would you rather have to write and maintain this complex and messy JSON, or this simple, compact terraform code?**
 
-Advance back to the previous slide to illustrate the difference between JSON and equivalent Terraform.
+これが前のスライドで紹介したARM Templateと同等のTerraformのCodeです。
 
 ---
 name: What-is-Terraform
 # What is Terraform?
 ```terraform
 resource "azurerm_virtual_machine" "catapp" {
+
   name                = "${var.prefix}-meow"
   location            = "${var.location}"
   resource_group_name = "${azurerm_resource_group.myresourcegroup.name}"
   vm_size             = "${var.vm_size}"
   network_interface_ids         = ["${azurerm_network_interface.catapp-nic.id}"]
 ```
-* Executable Documentation
-* Human and machine readable
-* Easy to learn
-* Test, share, re-use, automate
-* Works on all major cloud providers
+
+* 実行可能なドキュメント（のようなもの）
+* 人間にもマシンにも読みやすい形式
+* 習得が楽
+* テスト、共有、再利用、自動化
+* すべての主要なクラウドプロバイダに対応
 
 
 ???
@@ -211,9 +213,9 @@ name: IaC
 # What is Infrastructure as Code?
 <br><br><br>
 .biglist[
-Infrastructure as Code (IaC) is the process of managing and provisioning cloud infrastructure with machine-readable definition files.
+Infrastructure as Code (IaC)はインフラの「望むべき状態」をコードで記述し、その状態の構築をマシンに行わせる手法です。
 
-**Think of it as executable documentation.**
+**実行可能なドキュメント(のようなもの）**
 ]
 
 ???
@@ -232,7 +234,7 @@ name: IaC2
 ---
 name: IaC2
 # Infrastructure as Code Allows Us To...
-* Provide a codified workflow to create infrastructure
+* インフラ構築をコード化されたワークフローで自動化
 ???
 **...codified workflow. When you code-ify all of your manual steps, you'll gain several advantages that allow you to provision faster, with more efficiency, while reducing risk.**
 
@@ -240,17 +242,17 @@ name: IaC2
 ---
 name: IaC2
 # Infrastructure as Code Allows Us To...
-* Provide a codified workflow to create infrastructure
-* Change and update existing infrastructure
+* インフラ構築をコード化されたワークフローで自動化
+* 構築されたインフラへの更新
 ???
 **One of the main benefits of IaC is the ability to change and update what you built. There are many tools that allow you to provision infrastructure. This is sometimes called 'Day 0' of operations. The real challenge is managing Day N. What happens when you need to alter the infrastructure you built? Maybe you need to destroy or recreate part or all of it? Are you prepared to maintain and care for this infrastructure, without causing any downtime? Because Terraform is a _stateful_ tool, it can help you keep track of your infrastructure and change it with minimal impact.**
 
 ---
 name: IaC2
 # Infrastructure as Code Allows Us To...
-* Provide a codified workflow to create infrastructure
-* Change and update existing infrastructure
-* Safely test changes using **`terraform plan`** in dry run mode
+* インフラ構築をコード化されたワークフローで自動化
+* 構築されたインフラへの更新
+* **`terraform plan`**で更新内容の確認（dry-run）
 ???
 **Do you remember that scene in the movie Jurassic Park, where Samuel L Jackson turns around and says 'hold onto your butts' as he pushes his untested code change into production? Every sysadmin has had that feeling at one time or another. I really hope this works...**
 
@@ -261,10 +263,10 @@ name: IaC2
 ---
 name: IaC2
 # Infrastructure as Code Allows Us To...
-* Provide a codified workflow to create infrastructure
-* Change and update existing infrastructure
-* Safely test changes using **`terraform plan`** in dry run mode
-* Integrate with application code workflows (Git, Azure DevOps, CI/CD tools)
+* インフラ構築をコード化されたワークフローで自動化
+* 構築されたインフラへの更新
+* **`terraform plan`**で更新内容の確認（dry-run）
+* 様々なツールと連携 (Git, Azure DevOps, CI/CD tools)
 
 ???
 **Terraform allows you to automate manual processes and build continuous integration or continuous delivery pipelines. Imagine you had a pipeline for creating hardened machine images. Perhaps you have another pipeline for testing your infrastructure build process. These might be chained to other CI/CD application pipelines where the application is deployed into your tested, hardened infrastructure. Think of API driven infrastructure builds, written in a simple langage everybody can use and understand.**
@@ -272,11 +274,11 @@ name: IaC2
 ---
 name: IaC2
 # Infrastructure as Code Allows Us To...
-* Provide a codified workflow to create infrastructure
-* Change and update existing infrastructure
-* Safely test changes using **`terraform plan`** in dry run mode
-* Integrate with application code workflows (Git, Azure DevOps, CI/CD tools)
-* Provide reusable modules for easy sharing and collaboration
+* インフラ構築をコード化されたワークフローで自動化
+* 構築されたインフラへの更新
+* **`terraform plan`**で更新内容の確認（dry-run）
+* 様々なツールと連携 (Git, Azure DevOps, CI/CD tools)
+* 再利用可能なModuleにより容易にインフラを共有
 
 ???
 **As you expand your terraform usage, you'll have certain patterns and pieces of your infrastructure that you'd like to re-use. Maybe you want your network security to be set up a certain way, every time. Or perhaps someone wrote a great Terraform config for your web application. Terraform supports custom modules, which are simply packages of pre-built Terraform code that others can use. You can use Terraform modules to avoid repetition, enforce security, and ensure that standards are followed.**
@@ -284,12 +286,12 @@ name: IaC2
 ---
 name: IaC2
 # Infrastructure as Code Allows Us To...
-* Provide a codified workflow to create infrastructure
-* Change and update existing infrastructure
-* Safely test changes using **`terraform plan`** in dry run mode
-* Integrate with application code workflows (Git, Azure DevOps, CI/CD tools)
-* Provide reusable modules for easy sharing and collaboration
-* Enforce security policy and organizational standards
+* インフラ構築をコード化されたワークフローで自動化
+* 構築されたインフラへの更新
+* **`terraform plan`**で更新内容の確認（dry-run）
+* 様々なツールと連携 (Git, Azure DevOps, CI/CD tools)
+* 再利用可能なModuleにより容易にインフラを共有
+* 組織運用で必須のルールなどを強制的にポリシーチェック
 
 ???
 **Terraform Enterprise also supports policy enforcement. You can create a list of dos and do-nots for your users and ensure that people don't build things they shouldn't, or introduce unnecessary risk into your environments. For example, you may have a policy that states that servers should not be exposed to the public internet. Because all your infrastructure is stored as code, you can quickly analyze that code to see if it's breaking any of the rules, preventing the bad behavior *before* the infrastructure gets built.**
@@ -297,13 +299,13 @@ name: IaC2
 ---
 name: IaC2
 # Infrastructure as Code Allows Us To...
-* Provide a codified workflow to create infrastructure
-* Change and update existing infrastructure
-* Safely test changes using **`terraform plan`** in dry run mode
-* Integrate with application code workflows (Git, Azure DevOps, CI/CD tools)
-* Provide reusable modules for easy sharing and collaboration
-* Enforce security policy and organizational standards
-* Enable collaboration between different teams
+* インフラ構築をコード化されたワークフローで自動化
+* 構築されたインフラへの更新
+* **`terraform plan`**で更新内容の確認（dry-run）
+* 様々なツールと連携 (Git, Azure DevOps, CI/CD tools)
+* 再利用可能なModuleにより容易にインフラを共有
+* 組織運用で必須のルールなどを強制的にポリシーチェック
+* 異なるチーム間でのコラボレーション
 
 ???
 **Now that all your infrastructure is stored in a source code repository, it's very easy for multiple users and teams to collaborate on it. Developer needs a new feature? He or she can easily adjust the source code and send the change back to the operations folks for review. Terraform is a universal language that is understood by both developers and operations teams.**
