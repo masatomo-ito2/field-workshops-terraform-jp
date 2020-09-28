@@ -1,0 +1,18 @@
+#!/bin/bash
+source /etc/profile.d/instruqt-env.sh
+source /root/.bashrc
+/bin/set-workdir /root/hashicat-gcp
+
+# Give the student a head start.
+cp exercises/remote_backend.tf remote_backend.tf
+
+mkdir /root/.terraform.d
+cat <<-EOF > /root/.terraform.d/credentials.tfrc.json
+{
+  "credentials": {
+    "app.terraform.io": {
+      "token": "YOURTOKEN"
+    }
+  }
+}
+EOF

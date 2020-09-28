@@ -1,0 +1,76 @@
+slug: terraform-workshop-base
+id: hi9eo2mucqot
+type: track
+title: Terraform Workshop Environment
+teaser: |
+  An instruqt track template that you can copy and use for in your own demos and workshops.
+description: |-
+  This track can be copied and used as a starting point for Azure, GCP or AWS Terraform workshops. You can use it as-is for freestyle training, or customize it for specific use cases.
+
+  It comes with AWS, GCP and Azure credentials pre-installed and ready to use with Terraform. To use this track, simply copy the entire terraform-workshop-base directory and strip out all of the `id:` lines from your track.yml. Rename the tracks, create some content, run an `instruqt track push` and off you go.
+icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/terraform.png
+tags:
+- terraform
+- azure
+- aws
+- gcp
+- template
+owner: hashicorp
+developers:
+- roger@hashicorp.com
+- lance@hashicorp.com
+- scarolan@hashicorp.com
+private: true
+published: true
+challenges:
+- slug: setup-our-environment
+  id: 2l7dzxr3bgya
+  type: challenge
+  title: "\U0001F3E1 Moving in - Set Up Your Workspace"
+  teaser: |
+    Configure your code editor with the Terraform extension and open a workspace.
+  assignment: |-
+    Open the Code Editor tab on the left. First get familiar with the menus.
+
+    Find the "hamburger" or triple-line menu on the top of the navigation bar on the left. It's right underneath the Instruqt mascot logo. This is your Main Menu. You can find all the other VSC menu options here.
+
+    Right below the Main Menu you'll see a column of icons. The first icon looks like a stack of documents. This is the File Explorer.
+
+    Next you should install the Terraform extension to enable syntax highlighting in your code. Click on the extensions icon - it looks like four small boxes.
+
+    Search for **Terraform** and be sure to select the "Terraform 1.4.x" extension from mauve. **Do not select the "HashiCorp Terraform 2.x.y" extension** since it will not work in the version of the the Visual Studio Code Server that this track is using. Click the green **Install** button to install the extension. Then click the **Reload Required** button to activate it.
+
+    We have enabled auto-save in your Code Editor, so any changes you make will be saved as you type. You don't have to worry about saving files manually.
+
+    **Please execute all commands on the "Shell" tab.** While the Code Editor allows you to open a terminal window inside it, it is not currently possible to paste `terraform` commands from the assignment into it within Instruqt.
+
+    Congratulations, you are ready to start working with Terraform.
+
+    Click the **Check** button to continue.
+  notes:
+  - type: text
+    contents: |
+      Setting up your environment...
+      Keep an eye on the bottom right corner to know when you can get started.
+  - type: text
+    contents: The terraform command line tool is available for MacOS, FreeBSD, OpenBSD,
+      Windows, Solaris and Linux.
+  - type: text
+    contents: The terraform language is designed to be both human and machine-readable.
+  - type: text
+    contents: Most modern text editors support Terraform syntax highlighting.
+  tabs:
+  - title: Code Editor
+    type: service
+    hostname: workstation
+    port: 8443
+  - title: Text Editor
+    type: code
+    hostname: workstation
+    path: /root
+  - title: Shell
+    type: terminal
+    hostname: workstation
+  difficulty: basic
+  timelimit: 28800
+checksum: "1152631756001038093"

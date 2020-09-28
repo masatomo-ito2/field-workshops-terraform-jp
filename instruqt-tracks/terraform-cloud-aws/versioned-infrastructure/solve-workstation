@@ -1,0 +1,41 @@
+#!/bin/bash
+source /etc/profile.d/instruqt-env.sh
+source /root/.bashrc
+/bin/set-workdir /root/hashicat-aws
+
+# Get our TFC token and organization from the local config files
+TOKEN=$(grep token /root/.terraform.d/credentials.tfrc.json | cut -d '"' -f4)
+WORKSPACE_ID=$(curl -s --header "Authorization: Bearer $TOKEN"   --header "Content-Type: application/vnd.api+json"   https://app.terraform.io/api/v2/organizations/$ORG/workspaces/hashicat-aws | jq -r .data.id)
+
+if [[ -f /root/skipconfig.json ]]; then
+  GITUSER=$(jq -r .gituser < /root/skipconfig.json)
+  OAUTHID=$(jq -r .oauthid < /root/skipconfig.json)
+else
+  GITUSER="workshops-testbot"
+  OAUTHID="ot-tcRNmn3r5wrk65Kz"
+fi
+
+# Update the workspace with VCS settings
+echo "Creating a workspace JSON payload..."
+cat <<-EOF > /tmp/add_vcs.json
+{
+  "data": {
+    "attributes": {
+      "name": "hashicat-aws",
+      "operations": true,
+      "auto-apply": true,
+      "vcs-repo": {
+        "branch": "",
+        "ingress-submodules": false,
+        "identifier": "$GITUSER/hashicat-aws",
+        "display-identifier": "$GITUSER/hashicat-aws",
+        "oauth-token-id": "$OAUTHID"
+        }
+    },
+    "type": "workspaces"
+  }
+}
+EOF
+
+# Update the workspace to enable VCS
+curl --header "Authorization: Bearer $TOKEN" --header "Content-Type: application/vnd.api+json" --request PATCH --data @/tmp/add_vcs.json https://app.terraform.io/api/v2/organizations/$ORG/workspaces/hashicat-aws
