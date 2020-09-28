@@ -456,23 +456,24 @@ class: img-left
 # What is Terraform?
 ![Terraform](images\Terraform_VerticalLogo_FullColor.png)
 
-Terraform is an open source provisioning tool.
+TerraformはオープンソースのProvisioningツールです。
 
-It ships as a single binary which is written in Go. Terraform is cross platform and can run on Linux, Windows, or MacOS.
+Goで書かれたシングルバイナリになります。TerraformはLinux、Windows、MacOSなどクロスプラットフォームで動作します。
 
-Installing terraform is easy. You simply download a zip file, unzip it, and run it.
+Terraformのインストールはとてもシンプルで、Zipファイルをダウンロードしていただき、展開したバイナリをPathに配置していただくだけです。
 
 ---
 name: terraform-command-line
 class: col-2
 # Terraform Command Line
-Terraform is a command line tool.
 
-Terraform commands are either typed in manually or run automatically from a script.
+Terraformはコマンドラインツールです。
 
-The commands are the same whether you are on Linux or Windows or MacOS.
+Terraformコマンドはスクリプトで自動化することもできますし、コマンドラインから手動で実行することができます。
 
-Terraform has subcommands that perform different actions.
+TerraformコマンドはOSに関係なく同じ形態となっています。
+
+Terraformにはサブコマンドがあり、様々な作業を行います。
 
 ```terraform
 # Basic Terraform Commands
@@ -499,7 +500,8 @@ Common commands:
     fmt                Rewrites config files to canonical format
     graph              Create a visual graph of Terraform resources
 ```
-Type `terraform subcommand help` to view help on a particular subcommand.
+
+`terraform subcommand help`と打つことで特定のサブコマンドのヘルプが見れます。
 ???
 **This is a good command to know. Terraform help will reveal all the available subcommands.**
 
@@ -515,39 +517,37 @@ resource "azurerm_virtual_network" "vnet" {
 }
 ```
 
-Terraform code is based on the [HCL2 toolkit](https://github.com/hashicorp/hcl2). HCL stands for HashiCorp Configuration Language. Terraform code, or simply *terraform* is a declarative language for provisioning infrastructure on any cloud or platform.
+
+Terraformコードは[HCL2 toolkit](https://github.com/hashicorp/hcl2)で記述されます。 HCLは**HashiCorp Configuration Languager**の略です。Terraformコードは様々なクラウドやインフラに特化した**宣言的**な言語になります。 
 
 ---
 name: main.tf
 # Terraform Comments
-Line Comments begin with an octothorpe<sup>*</sup>, or pound symbol: #
+一行のコメントは**#**で記述します。
 ```hcl
 # This is a line comment.
 ```
 
-Block comments are contained between /\* and \*/ symbols.
+コメントブロックは /\* and \*/ などのシンボルで記述できます。
 ```tex
 /* This is a block comment.
 Block comments can span multiple lines.
 The comment ends with this symbol: */
 ```
-.small[
-\* Yes, it really is called an [octothorpe](https://www.merriam-webster.com/dictionary/octothorpe).
-]
 
 ---
 name: terraform-workspaces
 # Terraform Workspaces
 
-A terraform workspace is simply a folder or directory that contains terraform code.
+terraformのworkspaceはTerraformコード含んだディレクトリになります。
 
-Terraform files always end in either a `*.tf` or `*.tfvars` extension.
+Terraformファイルは`*.tf`や`*.tfvars`の拡張子になります。
 
-Most terraform workspaces contain a minimum of three files:
+ほとんどの場合、Terraform workspaceには以下の3つのファイルを含みます。
 
-**main.tf** - Most of your functional code will go here.<br>
-**variables.tf** - This file is for storing variables.<br>
-**outputs.tf** - Define what is shown at the end of a terraform run.<br>
+**main.tf** - 望むべき状態のインフラリソースを記述<br>
+**variables.tf** - 変数を記述<br>
+**outputs.tf** - Terraform実行後に表示するOutputを記述<br>
 
 ---
 name: terraform-init
@@ -563,7 +563,8 @@ provider.azurerm: version = "~> 1.35"
 
 Terraform has been successfully initialized!
 ```
-Terraform fetches any required providers and modules and stores them in the .terraform directory. If you add, change or update your modules or providers you will need to run init again.
+
+TerraformはInit処理の中で、必要なProviderやModuleを取得し、.terraformディレクトに保存します。もし、ProviderやModuleを更新したい場合は再度Terraform initを実行する必要があります。
 
 ???
 **Terraform has an extendible architecture. You download the core program, terraform, then it fetches plugins and modules that are required for your code.**
@@ -584,7 +585,8 @@ Terraform will perform the following actions:
     }
 Plan: 1 to add, 0 to change, 0 to destroy.
 ```
-Preview your changes with `terraform plan` before you apply them.
+
+`terraform plan`を実行すると、「何がProvisioningされるのか」プレビューを調べられます。
 
 ???
 **`terraform plan` is a dry run command. We're not actually building anything yet, Terraform is just telling is what it would do if we ran it for real.**
@@ -592,7 +594,10 @@ Preview your changes with `terraform plan` before you apply them.
 ---
 name: defining-variables
 # Where are Variables Defined?
-Terraform variables are placed in a file called *variables.tf*. Variables can have default settings. If you omit the default, the user will be prompted to enter a value. Here we are *declaring* the variables that we intend to use.
+
+
+Terraformの変数は*variables.tf*に記述されます。変数はデフォルト値を持てます。
+デフォルト値を指定しない場合は、実行時に入力を求められます。以下のようにして変数は宣言できます。
 
 ```tex
 variable "prefix" {
@@ -615,9 +620,8 @@ A. In the terraform.tfvars file, or optionally on the command line or via enviro
 name: setting-variables
 class: col-2
 # How are Variables Set?
-Once you have some variables defined, you can set and override them in different ways. Here is the level of precedence for each method.
 
-This list goes from highest precedence (1) to lowest (5).
+変数はいくつかの方法で上書き（Override)できます。
 
 <br>
 1. Command line flag - run as a command line switch
