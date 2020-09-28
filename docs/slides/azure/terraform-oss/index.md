@@ -937,7 +937,11 @@ class: title
 ---
 name: intro-to-provisioners
 # Using Terraform Provisioners
-Once you've used Terraform to stand up a virtual machine or container, you may wish to configure your operating system and applications. This is where provisioners come in. Terraform supports several different types of provisioners including: Bash, Powershell, Chef, Puppet, Ansible, and more.
+
+TerraformによりVMやコンテナ環境が構築された後、OSやアプリケーションの設定もしたい場合があります。そのような場合に便利なのが**Provisioner**です。TerraformはいつくかのタイプのProvisionerをサポートしています。
+* Bash / Powershell
+* Chef / Puppet / Ansible
+* など
 
 .center[https://www.terraform.io/docs/provisioners/index.html]
 
@@ -949,6 +953,8 @@ name: file-provisioner
 class: compact
 # The File Provisioner
 The Terraform file provisioner copies files onto the remote machine.
+File provisionerはリモートマシンへファイルをコピーします。
+
 
 ```terraform
 provisioner "file" {
@@ -964,7 +970,7 @@ provisioner "file" {
 }
 ```
 
-Note the *connection* block of code inside the provisioner block. The file provisioner supports both SSH and WinRM connections.
+**connection**ブロックで接続に必要な情報を記述します。File provisionerはSSHとWinRMをサポートしています。
 
 ???
 SSH for linux, WinRM for your windows machines.
@@ -973,7 +979,9 @@ SSH for linux, WinRM for your windows machines.
 name: remote-exec-provisioner
 class: compact
 # The Remote Exec Provisioner
-The remote exec provisioner allows you to execute scripts or other programs on the target host. If it's something you can run unattended (for example, a software installer), then you can run it with remote exec.
+
+Remote exec provisionerはスクリプトやプログラムなどをターゲット上で実行します。ソフトウェアやパッケージのインストールなど自動化できるものであればRemote execが便利です。
+
 
 ```terraform
 provisioner "remote-exec" {
@@ -986,7 +994,7 @@ provisioner "remote-exec" {
 }
 ```
 
-In this example we're running a few commands to change some permissions and ownership, and to run a script with some enviroment variables.
+この例では、いくつかのコマンドを実行してPermissionやOwnershipを変更しています。そして、最後に環境変数を設定しスクリプトを実行します。
 
 ???
 Local exec and remote exec can be used to trigger Puppet or Ansible runs. We do have a dedicated chef provisioner as well.
@@ -997,7 +1005,8 @@ class: compact
 # Terraform & Config Management Tools
 .center[![:scale 50%](images/cpa.jpg)]
 
-Terraform works well with common config management tools like Chef, Puppet or Ansible. Below are some links with more information on each:
+TerraformはChef、Puppet、Ansibleなどとよく連携されます。より詳細の情報は以下より参照ください。
+
 
 Official Chef Terraform provisioner:<br>
 https://www.terraform.io/docs/provisioners/chef.html
@@ -1011,11 +1020,12 @@ https://github.com/scarolan/ansible-terraform
 ---
 name: provisioner-tips
 # Terraform Provisioner Tips
-Terraform provisioners like remote-exec are great when you need to run a few simple commands or scripts. For more complex configuration management you'll want a tool like Chef or Ansible.
 
-Provisioners only run the first time a Terraform run is executed. In this sense, they are not idempotent. If you need ongoing state management of VMs or servers that are long-lived, we recommend using a config management tool.
+Remote execなどのProvisionerはいくつかの追加のコマンドやスクリプトを実行する際に便利です。より複雑な設定をする場合はChefやAnsibleの利用を推奨します。
 
-On the other hand, if you want immutable infrastructure you should consider using our [Packer](https://packer.io) tool.
+Provisionerは最初のTerraform applyの時だけ実行されます。よって、Long-livedなVMやサーバーの管理をしたい場合はConfiguration managementツールを推奨します。
+
+真にImmutableなインフラが求められる場合は、HashiCorpの別製品である[Packer](https://packer.io)も便利です。
 
 ---
 name: lab-exercise-2b
