@@ -315,7 +315,8 @@ name: IaC-Tools
 # Other Infrastructure as Code Tools
 .center[![:scale 40%](images/infra_tools.png)]
 
-These tools work well for configuring the operating system and application. They are not purpose-built for provisioning cloud infrastructure and platform services.
+これらのツールはOSやアプリケーションの設定目的で作られており、Provisioning目的ではありません。
+TerraformはConfiguration Managementツールではないので、むしろこれらのツールとの連携でお互いの長所を補います。
 
 ???
 **Some of you might be thinking, that sounds great but what about this other tool that I use? Why shouldn't I just use Ansible since we already have that? Or my people only do Powershell. These are all great tools. But none of them are specifically designed for provisioning tasks.**
@@ -327,9 +328,10 @@ name: Native-Tools
 # Native Cloud Provisioning Tools
 .center[![:scale 90%](images/clouds.png)]
 
-Each cloud has its own YAML or JSON based provisioning tool.
+各クラウドプロバイダーは独自のProvisioningツールを出しています。
 
-Terraform can be used across *all* major cloud providers and VM hypervisors.
+Terraformはこれら全てのクラウドプロバイダーに対して共通のコードフレームワーク及びワークフローで利用できます。
+
 
 ???
 **Every major cloud provider has their own JSON or YAML based provisioning tool. But all of them are written in YAML or JSON. And if you learn one of these systems, guess what, the others are completely different. Now if you want to have a multi-cloud strategy you have to learn three separate provisioning systems. With Terraform you are using the same language, the same simple syntax on all three of these cloud providers.**
@@ -353,7 +355,7 @@ Terraform:
 name = "${var.PilotServerName}-vm"
 ```
 
-Terraform code (HCL) is easy to learn and easy to read. It is also 50-70% more compact than an equivalent JSON configuration.
+Terraform code (HCL)は習得が楽で、読みやすさにも定評があります。JSONなどに比べて５０〜７０％少ないコードで記述できます。
 
 ???
 1Password did a great blog post illustrating the difference between JSON configuration files and Terraform.
@@ -374,7 +376,7 @@ Name: Why-Terraform
 Name: Why-Terraform-on-Azure
 # Why Terraform on Azure?
 
-* Supports multi-cloud & hybrid infrastructure
+* マルチクラウド・ハイブリッドクラウドに対応
 
 ???
 **Why specifcially should you use Terraform on Azure? The first reason is that Terraform supports your hybrid or multi-cloud strategy. If you need to build some infrastructure on-prem, and some in Azure, Terraform is a natural fit. Your technical staff only has to learn a single language to be able to provision in either environment.**
@@ -383,8 +385,8 @@ Name: Why-Terraform-on-Azure
 Name: Why-Terraform-on-Azure
 # Why Terraform on Azure?
 
-* Supports multi-cloud & hybrid infrastructure
-* Migrate from other cloud providers
+* マルチクラウド・ハイブリッドクラウドに対応
+* 他のクラウドプロバイダーからのマイグレーション
 
 ???
 **Terraform is also great for migrating between cloud providers. Let's say you wanted to move some workloads to Azure. The code changes in Terraform would be much easier to implement than they would via ARM templates. I was able to migrate a simple demo application from one cloud to another in a few short hours, because there was almost no learning curve. Terraform code looks the same no matter where you run it.**
@@ -393,9 +395,9 @@ Name: Why-Terraform-on-Azure
 Name: Why-Terraform-on-Azure
 # Why Terraform on Azure?
 
-* Supports multi-cloud & hybrid infrastructure
-* Migrate from other cloud providers
-* Increase provisioning speed
+* マルチクラウド・ハイブリッドクラウドに対応
+* 他のクラウドプロバイダーからのマイグレーション
+* Provisioninにかかる手間の短縮
 
 ???
 **It's not unusual to see provisioning times drop from days or weeks to hours or minutes when users adopt Terraform. Ineffective manual steps and change approvals can be replaced with fast code pipelines that have rigorous testing and security built right in. Now instead of waiting for days for a change request to be approved, users can self-provision their infrastructure without bottlenecks or slow approval processes.**
@@ -404,10 +406,10 @@ Name: Why-Terraform-on-Azure
 Name: Why-Terraform-on-Azure
 # Why Terraform on Azure?
 
-* Supports multi-cloud & hybrid infrastructure
-* Migrate from other cloud providers
-* Increase provisioning speed
-* Improve efficiency
+* マルチクラウド・ハイブリッドクラウドに対応
+* 他のクラウドプロバイダーからのマイグレーション
+* Provisioninにかかる手間の短縮
+* DevSecOpsを実現
 
 ???
 **Have you heard the saying 'measure twice, cut once?'? Terraform forces your operations teams to be disciplined and consistent with every single build. Have a change or setting that was overlooked during the build? Now you can immediately correct that mistake inside the code, so that a particular step never gets missed again. All future builds will contain the change. This can also improve relations between developers and operations, because the contract is clear. What gets built is always defined in the code, and never left to guesswork or manual processes.**
@@ -416,11 +418,11 @@ Name: Why-Terraform-on-Azure
 Name: Why-Terraform-on-Azure
 # Why Terraform on Azure?
 
-* Supports multi-cloud & hybrid infrastructure
-* Migrate from other cloud providers
-* Increase provisioning speed
-* Improve efficiency
-* Reduce risk
+* マルチクラウド・ハイブリッドクラウドに対応
+* 他のクラウドプロバイダーからのマイグレーション
+* Provisioninにかかる手間の短縮
+* DevSecOpsを実現
+* リスクの軽減
 
 ???
 **Every modern IT organization has to deal with risk. It's a balancing act between security and usability. You can make it so secure nobody can use it, or on the other end you have a free for all where users can do whatever they want, but are putting the entire cloud account in jeopardy due to risky behavior. Terraform allows you to reduce risk by abstracting your users away from the web UI or API. Instead we provide a safe, auditable abstraction layer that lets users get their work done in a secure and safe way, that doesn't grant unnecessary privileged access.**
