@@ -1056,9 +1056,9 @@ class: title
 name: terraform-state
 class: compact
 # Terraform State
-Terraform is a _stateful_ application. This means that it keeps track of everything you build inside of a **state file**. You may have noticed the terraform.tfstate and terraform.tfstate.backup files that appeared inside your working directory.
+Terraformは_stateful_なアプリケーションです。Terraformは全ての実行結果(インフラの状態）を**state file**に保存します。**state file**はterraform.tfstateやterraform.tfstate.backupといったファイルになります。
 
-The state file is Terraform's source of record for everything it knows about.
+State fileはTerraformにとって「Source of record」ですので、非常に大切に扱う必要があります。 
 
 ```json
 {
@@ -1076,11 +1076,12 @@ The state file is Terraform's source of record for everything it knows about.
 ---
 name: terraform-refresh
 # Terraform Refresh
-Sometimes infrastructure may be changed outside of Terraform's control.
 
-The state file represents the *last known* state of the infrastructure. If you'd like to check and see if the state file still matches what you built, you can use the **terraform refresh** command.
+場合によってはTerraform以外からインフラへ変更が加えられる時があります。
 
-Note that this does *not* update your infrastructure, it simply updates the state file.
+State fileは**最後にTerraformを実行**した時の状態です。現在のインフラの状況と照らし合わせたい場合は**terraform refresh**コマンドを使います。
+
+**terraform refresh**コマンドはState fileを更新するだけで、インフラへ変更は行いません。
 
 ```bash
 terraform refresh
@@ -1091,13 +1092,13 @@ name: change-existing-infra
 class: compact
 # Changing Existing Infrastructure
 
-Whenever you run a plan or apply, Terraform reconciles three different data sources:
+Terraformでplanやapplyを実行すると、３つのデータソースにより処理が決定されます。
 
-1.  What you wrote in your code
-2.  The state file
-3.  What actually exists
+1.  Terraformコード
+2.  state file
+3.  現在インフラの状況
 
-Terraform does its best to add, delete, change, or replace existing resources based on what is in your *.tf files. Here are the four different things that can happen to each resource during a plan/apply:
+Terraformはこれらの状態で処理（create, delete, change, replace)を決定します。
 
 ```tex
 +   create
@@ -1110,7 +1111,7 @@ Terraform does its best to add, delete, change, or replace existing resources ba
 name: state-quiz
 class: compact
 # Terraform State Quiz
-| Configuration           | State                   | Reality                 | Operation |
+| Terraform コード        | State file              | 現在のインフラの状態    | 処理      |
 | ----------------------- | ----------------------- | ----------------------- |:---------:|
 | azurerm_virtual_machine |                         |                         |    ???    |
 | azurerm_virtual_machine | azurerm_virtual_machine |                         |    ???    |
@@ -1119,13 +1120,14 @@ class: compact
 |                         |                         | azurerm_virtual_machine |    ???    |
 |                         | azurerm_virtual_machine |                         |    ???    |
 
-What happens in each scenario? Discuss.
+
+それぞれの場合にTerraformはどのような処理をとるでしょうか？
 
 ---
 name: state-quiz-answers
 class: compact
 # Terraform State Quiz
-| Configuration           | State                   | Reality                 | Operation    |
+| Terraform コード        | State file              | 現在のインフラの状態    | 処理         |
 | ----------------------- | ----------------------- | ----------------------- |:------------:|
 | azurerm_virtual_machine |                         |                         | create       |
 | azurerm_virtual_machine | azurerm_virtual_machine |                         | create       |
@@ -1146,42 +1148,43 @@ class: title
 name: terraform-cloud
 class: img-right
 # Terraform Cloud
-##### Terraform Cloud is a free to use SaaS application that provides the best workflow for writing and building infrastructure as code with Terraform.
+##### Terraform Cloudは無料で利用できるSaaSで、TerraformによるProvisioningのワークフローのベストプラクティスを提供します。
 ![Terraform Cloud](https://www.terraform.io/assets/images/terraform-overview/automate-the-provisioning-lifecycle@4x-5cc6a17f.png)
 
-* State storage and management
-* Web UI for viewing and approving Terraform runs
+* State fileの管理
+* Runの表示や承認のWeb UI
 * Private module registry
-* Version Control System (VCS) integration
-* CLI, API or GUI driven actions
-* Notifications for run events
-* Full HTTP API for automation
+* Version Control System (VCS)連携
+* CLI, API, GUI駆動の実行
+* Runイベントの通知
+* 自動化のためのFull HTTP API
 
 ---
 name: tfcloud-vs-tfe
 # Terraform Cloud or Terraform Enterprise
-**Terraform Cloud** is a hosted application that provides features like remote state management, API driven runs, policy management and more. Many users prefer a cloud based SaaS solution because they don't want to maintain the infrastructure to run it.
 
-**Terraform Enterprise** is the same application, but it runs in your cloud environment or data center. Some users require more control over the Terraform Enterprise application, or wish to run it in restricted networks behind corporate firewalls.
+**Terraform Cloud**は、リモートState管理、API駆動のRun、ポリシー管理などの機能を提供するホスト型アプリケーションです。多くのユーザーは、Terraformを実行するためのインフラの管理をしたくないため、クラウドベースのSaaSソリューションを選択します。
 
-The feature list for these two offerings is nearly identical. We will be using Terraform Cloud accounts for the next lab exercise.
+**Terraform Enterprise**は同じアプリケーションですが、お客様のクラウド環境やデータセンターで動作します。より細かい制御をしたい場合や、企業のファイアウォール内の制限されたネットワークで実行したい場合に最適です。
+
+これら2つの製品の機能リストはほぼ同じです。次のLabでは、Terraform Cloudアカウントを使用します。
 
 ---
 name: terraform-cloud-remote-state
 # Terraform Remote State
-By default Terraform stores its state file in the workspace directory on your laptop or workstation. This is ok for development and experimentation, but in a production environment you need to protect and store the state file safely.
 
-Terraform has an option to store and secure your state files remotely. Terraform Cloud accounts now offer unlimited state file storage even for open source users.
+TerraformはワークスペースディレクトリにState fileを保存します。これは開発やちょっとしたテストには適していますが、本番環境ではState fileを安全に保護する必要があるので適していません。
 
-All state files are encrypted (using HashiCorp Vault) and stored securely in your Terraform Cloud account. You'll never have to worry about losing or deleting your state file again.
+Terraformには、リモートでState fileを保存するオプションがあります。Terraform Cloudでは、オープンソース・ユーザーであってもState fileを無制限に保存できるようになりました。
 
+すべてのステートファイルは暗号化され（HashiCorp Vaultを使用）、Terraform Cloudアカウントに安全に保存されます。State fileの紛失や削除を心配する必要はありません。
 ---
 name: execution-mode
 # Terraform Cloud Execution Modes
 
-**Local Execution** - Terraform commands run on your laptop or workstation and all variables are configured locally. Only the terraform state is stored remotely.
+**Local実行** - TerraformコマンドはLocalマシンで実行され、すべての変数もローカルで設定されます。terraformのState fileのみがリモートに保存されます。
 
-**Remote Execution** - Terraform commands are run in a Terraform Cloud container environment. All variables are stored in the remote workspace. Code can be stored in a Version Control System repository. Limited to 1 concurrent run for free tier users.
+**Remote実行** - TerraformコマンドはTerraform Cloud上のコンテナ環境で実行されます。変数はリモートのワークスペースに保存されます。Terraformコードはバージョン管理システムのリポジトリに保存できます。無料ユーザーの同時Terraform実行は1回に制限されています。
 
 ---
 name: lab-exercise-2c
